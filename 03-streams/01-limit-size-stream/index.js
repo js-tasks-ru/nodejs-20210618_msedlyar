@@ -8,6 +8,10 @@ limitedStream.pipe(outStream);
 
 limitedStream.write('hello'); // 'hello' - это 5 байт, поэтому эта строчка целиком записана в файл
 
+limitedStream.on('error', (err) => {
+  console.log(err);
+});
+
 setTimeout(() => {
   limitedStream.write('world'); // ошибка LimitExceeded! в файле осталось только hello
 }, 10);
