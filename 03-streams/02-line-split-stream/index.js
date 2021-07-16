@@ -15,5 +15,5 @@ lines.on('data', onData);
 lines.write(`0 строка`);
 lines.write(`первая строка${os.EOL}вторая строка${os.EOL}третья строка`);
 lines.write(`4 строка`);
-// lines.write(`a${os.EOL}b`);
+
 lines.end();
