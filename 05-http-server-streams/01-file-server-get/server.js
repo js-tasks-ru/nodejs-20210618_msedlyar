@@ -44,14 +44,14 @@ const handleGetMethod = (filepath, pathname) => {
 
   if (-1 !== pathname.search('/')) {
     code = 400;
-    message = 'Filename is`n correct. It must not include the slash';
+    message = 'Filename is not correct. It must not include the slash';
 
     return { code, message };
   }
 
   if (!isFile) {
     code = 404;
-    message = 'File in not found';
+    message = 'File is not found';
 
     return { code, message };
   }
