@@ -18,7 +18,7 @@ server.on('request', (req, res) => {
         if (200 !== handler.code) {
           res.statusCode = handler.code;
           res.end(handler.message);
-          break;
+          return;
         }
 
         const fileStream = fs.createReadStream(filepath);
