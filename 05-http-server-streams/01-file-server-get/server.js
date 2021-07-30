@@ -1,6 +1,7 @@
 const url = require('url');
 const http = require('http');
 const path = require('path');
+const fs = require('fs');
 
 const server = new http.Server();
 
@@ -11,6 +12,22 @@ server.on('request', (req, res) => {
 
   switch (req.method) {
     case 'GET':
+      try {
+        const handler = handleGetMethod(filepath, pathname);
+
+        if (200 !== handler.code) {
+          res.statusCode = handler.code;
+          res.end(handler.message);
+          return;
+        }
+
+        const fileStream = fs.createReadStream(filepath);
+
+        fileStream.pipe(res);
+      } catch (err) {
+        res.statusCode = 500;
+        res.end('Something went wrong');
+      }
 
       break;
 
@@ -19,5 +36,27 @@ server.on('request', (req, res) => {
       res.end('Not implemented');
   }
 });
+
+const handleGetMethod = (filepath, pathname) => {
+  const isFile = fs.existsSync(filepath);
+  let code = 200;
+  let message = '';
+
+  if (-1 !== pathname.search('/')) {
+    code = 400;
+    message = 'Filename is not correct. It must not include the slash';
+
+    return { code, message };
+  }
+
+  if (!isFile) {
+    code = 404;
+    message = 'File is not found';
+
+    return { code, message };
+  }
+
+  return { code, message };
+};
 
 module.exports = server;
